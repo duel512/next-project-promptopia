@@ -6,17 +6,19 @@ import { useState, useEffect } from "react"
 import {signIn, signOut, useSession, getProviders } from 'next-auth/react'
 
 const Nav = () => {
-  const isUserLoggedIn = true;
+  const {data: session} = useSession();
+
   const [providers, setProviders] = useState(null);
   const [toggleDropDown, setToggleDropDown] = useState(false);
 
   useEffect(() => {
-    (
-      async () => {
+    const setUpProviders = async () => {
         const res = await getProviders();
+
         setProviders(res);
       }
-    )()
+      
+    setUpProviders()
   }, [])
 
   return (
@@ -26,15 +28,16 @@ const Nav = () => {
          alt='logo'
          width={30}
          height={30}
-         className='object-contain'/>
+         className='object-contain'
+        />
 
         <p className="logo_text">Promptopia</p>
       </Link>
 
       {/* Desktop Navigation */}
-      <div  className="sm:flex hidden">
+      <div className="sm:flex hidden">
           {
-            isUserLoggedIn ? (
+            session?.user ? (
               <div className="flex gap-3 md:gap-5">
                 <Link  
                   href="/create-prompt"
@@ -47,7 +50,7 @@ const Nav = () => {
                 </button>
               <Link href="/profile"> 
                 <Image 
-                  src="/images/logo.svg"  // to be changed
+                  src={session?.user.image}  // to be changed
                   width={37}
                   height={37}
                   className="rounded-full"
@@ -78,12 +81,12 @@ const Nav = () => {
       </div>
 
       {/* Mobile Navigation */}
-      <div  className="sm:hidden flex relative">
+      <div className="sm:hidden flex relative">
           {
-            isUserLoggedIn ? (
+            session?.user ? (
               <div className="flex">
                 <Image
-                  src="/images/logo.svg"  // to be changed
+                src={session?.user.image}  // to be changed
                   width={37}
                   height={37}
                   className="rounded-full"
