@@ -48,12 +48,12 @@ const Feed = () => {
           required
           className="search_input peer"
         />
+      </form>
 
       <PromptCardList
         data={posts}
         handleTagClick={()=>{}}
       />
-      </form>
     </section>
   )
 }
