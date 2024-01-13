@@ -24,11 +24,11 @@ const MyProfile = () => {
             fetchPosts();
       }, [])
 
-    const handleEdit = () => {
-
+    const handleEdit = (post) => {
+      router.push(`/update-prompt?id=${post._id}`);
     }
 
-    const handleDelete = () => {
+    const handleDelete = (post) => {
         
     }
 
