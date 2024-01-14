@@ -21,28 +21,45 @@ const PromptCardList = ({ data, handleTagClick }) => {
 const Feed = () => {
   const [searchText, setSearchText] = useState('');
   const [posts, setPosts] = useState([]);
-
-  const handleSearchChange = (e) => {
-    setSearchText(e.target.value)
-  }
+  const [searchedPosts, setSearchedPosts] = useState([])
 
   const fetchPosts = async ()=> {
     const response = await fetch('/api/prompt')
     const data = await response.json();
 
     setPosts(data);
+    setSearchedPosts(data);
    }
 
   useEffect(()=>{
     fetchPosts();
   }, [])
 
+  const handleSearchChange = (e) => {
+    const text = e.target.value
+    setSearchText(text)
+
+    if(text){
+      const filtered = posts.filter((post) => {
+            const idMatch = post.creator ? post.creator.username.includes(text) : false;
+            const promptMatch = post.prompt ? post.prompt.includes(text) : false;
+            const tagMatch = post.tag ? post.tag.includes(text) : false;
+            return idMatch || promptMatch || tagMatch;
+          });
+
+          setSearchedPosts(filtered);
+    } else{
+      setSearchedPosts(posts);
+    }
+    
+  }
+
   return (
     <section className="feed">
       <form className="relative w-full flex-center">
         <input  
           type="text"
-          placeholder="Search for a tag or a username"
+          placeholder="Search for a username, tag, or prompt content"
           value={searchText}
           onChange={handleSearchChange}
           required
@@ -51,7 +68,7 @@ const Feed = () => {
       </form>
 
       <PromptCardList
-        data={posts}
+        data={searchedPosts}
         handleTagClick={()=>{}}
       />
     </section>
