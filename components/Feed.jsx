@@ -68,10 +68,6 @@ const Feed = () => {
     setSearchedPosts(filtered);
   };
 
-  // const handleNameClick = (id) => {
-  //   router.push()
-  // }
-
   return (
     <section className="feed">
       <form className="relative w-full flex-center">
@@ -85,7 +81,7 @@ const Feed = () => {
         />
       </form>
 
-      <PromptCardList data={posts} handleTagClick={handleTagClick} />
+      <PromptCardList data={searchedPosts} handleTagClick={handleTagClick} />
     </section>
   );
 };
